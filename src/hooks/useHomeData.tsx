@@ -13,7 +13,7 @@ import {
   tagMedia,
   type CategoryQuery,
 } from '@/src/services/categories';
-import { TMDBService } from '@/src/services/TMDBService';
+import { CinemetaService } from '@/src/services/CinemetaService';
 import type { MediaItem } from '@/src/types';
 import { getRegionName, useCatalogRegion } from '@/src/hooks/useCatalogRegion';
 
@@ -116,8 +116,8 @@ export const HomeDataProvider = ({ children }: { children: ReactNode }) => {
     setError(null);
     const regionCode = regionRef.current;
     const [movies, tv] = await Promise.all([
-      TMDBService.getPopularMovies(1, regionCode),
-      TMDBService.getPopularTVShows(1, regionCode),
+      CinemetaService.catalog('movie'),
+      CinemetaService.catalog('series'),
     ]);
 
     const popularMovies = tagMedia(movies.results, 'movie');
