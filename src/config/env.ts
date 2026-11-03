@@ -1,7 +1,7 @@
 /**
  * Centralized runtime configuration.
- * Values are read from `EXPO_PUBLIC_*` variables so secrets live in `.env`,
- * never hardcoded in source. See `.env.example` for the required keys.
+ * EXPO_PUBLIC_* variables are embedded in the app and are not secrets.
+ * Keep private credentials on a trusted backend. See `.env.example` for the required keys.
  */
 
 const required = (value: string | undefined, name: string): string => {
@@ -49,12 +49,9 @@ export const FLIXQUEST_CONFIG = {
 } as const;
 
 /** Remote M3U playlist merged into Live TV as the PH category. */
-const DEFAULT_LIVE_TV_M3U_URL =
-  'https://raw.githubusercontent.com/Harleythetech/IPHTV/main/ph.m3u';
-
 export const LIVE_TV_M3U_CONFIG = {
-  url: process.env.EXPO_PUBLIC_LIVE_TV_M3U_URL?.trim() || DEFAULT_LIVE_TV_M3U_URL,
-  enabled: true,
+  url: process.env.EXPO_PUBLIC_LIVE_TV_M3U_URL?.trim() || '',
+  enabled: Boolean(process.env.EXPO_PUBLIC_LIVE_TV_M3U_URL?.trim()),
 } as const;
 
 /** Live tab is shown when FlixQuest DLHD and/or the PH M3U playlist is on. */
@@ -63,8 +60,8 @@ export const LIVE_TV_CONFIG = {
 } as const;
 
 export const UPDATE_CONFIG = {
-  OWNER: process.env.EXPO_PUBLIC_UPDATE_REPO_OWNER || 'sheeshcake',
-  REPO: process.env.EXPO_PUBLIC_UPDATE_REPO_NAME || 'Flickv4',
+  OWNER: process.env.EXPO_PUBLIC_UPDATE_REPO_OWNER || 'Candersondev',
+  REPO: process.env.EXPO_PUBLIC_UPDATE_REPO_NAME || 'CA-Flick',
   API_BASE_URL: 'https://api.github.com',
   /** Minimum hours between automatic update checks. */
   CHECK_INTERVAL_HOURS: 24,
