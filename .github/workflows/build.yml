@@ -14,6 +14,7 @@ on:
   push:
     branches:
       - v2.x.x
+      - feature/ca-flick-independence
   workflow_dispatch:
     inputs:
       app_version:
