@@ -1,23 +1,23 @@
 {
   "expo": {
-    "name": "Flick",
-    "slug": "flick",
+    "name": "CA-Flick",
+    "slug": "ca-flick",
     "version": "0.0.0",
     "orientation": "default",
     "icon": "./assets/applogo/ic_launcher.png",
     "userInterfaceStyle": "dark",
     "backgroundColor": "#000000",
-    "scheme": "flick",
+    "scheme": "caflick",
     "ios": {
       "supportsTablet": true,
       "icon": "./assets/applogo/ic_launcher.png",
-      "bundleIdentifier": "com.wfrdee.flick",
+      "bundleIdentifier": "com.candersondev.caflick",
       "infoPlist": {
-        "NSCameraUsageDescription": "Flick uses the camera so you can join a watch-party video call.",
-        "NSMicrophoneUsageDescription": "Flick uses the microphone so you can join a watch-party video call.",
-        "NSDocumentsFolderUsageDescription": "Flick uses Documents to store and open downloaded videos.",
-        "NSDownloadsFolderUsageDescription": "Flick uses Downloads so you can save and open local files.",
-        "NSDesktopFolderUsageDescription": "Flick uses Desktop so you can open local video files.",
+        "NSCameraUsageDescription": "CA-Flick uses the camera so you can join a watch-party video call.",
+        "NSMicrophoneUsageDescription": "CA-Flick uses the microphone so you can join a watch-party video call.",
+        "NSDocumentsFolderUsageDescription": "CA-Flick uses Documents to store and open downloaded videos.",
+        "NSDownloadsFolderUsageDescription": "CA-Flick uses Downloads so you can save and open local files.",
+        "NSDesktopFolderUsageDescription": "CA-Flick uses Desktop so you can open local video files.",
         "LSSupportsOpeningDocumentsInPlace": true
       }
     },
@@ -39,7 +39,7 @@
         "android.permission.MODIFY_AUDIO_SETTINGS"
       ],
       "predictiveBackGestureEnabled": true,
-      "package": "com.flickv4",
+      "package": "com.candersondev.caflick",
       "versionCode": 1
     },
     "web": {
@@ -67,8 +67,8 @@
       [
         "@config-plugins/react-native-webrtc",
         {
-          "cameraPermission": "Flick uses the camera so you can join a watch-party video call.",
-          "microphonePermission": "Flick uses the microphone so you can join a watch-party video call."
+          "cameraPermission": "CA-Flick uses the camera so you can join a watch-party video call.",
+          "microphonePermission": "CA-Flick uses the microphone so you can join a watch-party video call."
         }
       ]
     ]
