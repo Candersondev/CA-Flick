@@ -11,7 +11,7 @@ import { Spinner } from '@/components/ui/spinner';
 import { Text } from '@/components/ui/text';
 import { Input, InputField, InputSlot, InputIcon } from '@/components/ui/input';
 import { ContentCard } from '@/src/components/ContentCard';
-import { TMDBService } from '@/src/services/TMDBService';
+import { CinemetaService } from '@/src/services/CinemetaService';
 import { useDebounce } from '@/src/hooks/useDebounce';
 import { useDeviceKind } from '@/src/hooks/useDeviceKind';
 import {
@@ -52,8 +52,8 @@ export const SearchScreen = () => {
   useEffect(() => {
     let cancelled = false;
     Promise.all([
-      TMDBService.getTrendingMovies(),
-      TMDBService.getTrendingTVShows(),
+      CinemetaService.catalog('movie'),
+      CinemetaService.catalog('series'),
     ])
       .then(([movies, tv]) => {
         if (cancelled) return;
@@ -86,7 +86,7 @@ export const SearchScreen = () => {
     let cancelled = false;
     setLoading(true);
     setError(null);
-    TMDBService.searchMulti(term)
+    CinemetaService.search(term)
       .then((res) => {
         if (!cancelled) setResults(res.results);
       })
