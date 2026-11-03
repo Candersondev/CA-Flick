@@ -7,7 +7,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Flick</string>
+	<string>CA-Flick</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -27,8 +27,7 @@
 		<dict>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>flick</string>
-				<string>com.wfrdee.flick</string>
+				<string>caflick</string>
 			</array>
 		</dict>
 	</array>
@@ -48,15 +47,15 @@
 		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Flick uses the camera so you can join a watch-party video call.</string>
+	<string>CA-Flick uses the camera so you can join a watch-party video call.</string>
 	<key>NSDesktopFolderUsageDescription</key>
-	<string>Flick uses Desktop so you can open local video files.</string>
+	<string>CA-Flick uses Desktop so you can open local video files.</string>
 	<key>NSDocumentsFolderUsageDescription</key>
-	<string>Flick uses Documents to store and open downloaded videos.</string>
+	<string>CA-Flick uses Documents to store and open downloaded videos.</string>
 	<key>NSDownloadsFolderUsageDescription</key>
-	<string>Flick uses Downloads so you can save and open local files.</string>
+	<string>CA-Flick uses Downloads so you can save and open local files.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Flick uses the microphone so you can join a watch-party video call.</string>
+	<string>CA-Flick uses the microphone so you can join a watch-party video call.</string>
 	<key>RCTNewArchEnabled</key>
 	<true/>
 	<key>UIBackgroundModes</key>
