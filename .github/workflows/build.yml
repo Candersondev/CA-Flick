@@ -4,11 +4,11 @@
 # Optional:
 #   EXPO_PUBLIC_WATCH_PARTY_URL
 #
-# Pushing to v2.x.x bumps the patch version, builds APK + IPA, and
-# publishes a GitHub Release. Manual runs (workflow_dispatch) only upload
+# Pushing to v2.x.x bumps the patch version, builds an Android APK, and
+# publishes an Android GitHub Release. Manual runs (workflow_dispatch) only upload
 # artifacts unless you enable create_release.
 
-name: Build Android & iOS
+name: Build Android APK
 
 on:
   push:
@@ -152,80 +152,9 @@ jobs:
           path: CA-Flick-${{ needs.version.outputs.app_version }}.apk
           if-no-files-found: error
 
-  ios:
-    name: iOS IPA
-    needs: version
-    runs-on: macos-15
-    timeout-minutes: 90
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Select Xcode
-        uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: latest-stable
-
-      - name: Setup CA-Flick
-        uses: ./.github/actions/setup-flick
-        with:
-          app_version: ${{ needs.version.outputs.app_version }}
-          android_version_code: ${{ needs.version.outputs.android_version_code }}
-          tmdb_api_key: ${{ secrets.EXPO_PUBLIC_TMDB_API_KEY }}
-          wyzie_api_key: ${{ secrets.EXPO_PUBLIC_WYZIE_API_KEY }}
-          watch_party_url: ${{ secrets.EXPO_PUBLIC_WATCH_PARTY_URL }}
-
-      - name: Install CocoaPods
-        run: |
-          gem install cocoapods
-          pod install --project-directory=ios
-
-      - name: Set iOS version
-        env:
-          APP_VERSION: ${{ needs.version.outputs.app_version }}
-          ANDROID_VERSION_CODE: ${{ needs.version.outputs.android_version_code }}
-        run: |
-          /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString ${APP_VERSION}" ios/Flick/Info.plist
-          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion ${ANDROID_VERSION_CODE}" ios/Flick/Info.plist
-
-      - name: Build unsigned Release app
-        env:
-          APP_VERSION: ${{ needs.version.outputs.app_version }}
-          ANDROID_VERSION_CODE: ${{ needs.version.outputs.android_version_code }}
-        run: |
-          xcodebuild \
-            -workspace ios/Flick.xcworkspace \
-            -scheme Flick \
-            -configuration Release \
-            -sdk iphoneos \
-            -destination 'generic/platform=iOS' \
-            -derivedDataPath ios/build/DerivedData \
-            CODE_SIGNING_ALLOWED=NO \
-            CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGN_IDENTITY="" \
-            MARKETING_VERSION="${APP_VERSION}" \
-            CURRENT_PROJECT_VERSION="${ANDROID_VERSION_CODE}" \
-            build
-
-      - name: Package IPA
-        env:
-          APP_VERSION: ${{ needs.version.outputs.app_version }}
-        run: |
-          APP="ios/build/DerivedData/Build/Products/Release-iphoneos/Flick.app"
-          test -d "$APP"
-          mkdir -p ios/build/Payload
-          cp -R "$APP" ios/build/Payload/
-          (cd ios/build && zip -qry "CA-Flick-${APP_VERSION}.ipa" Payload)
-
-      - name: Upload IPA
-        uses: actions/upload-artifact@v4
-        with:
-          name: CA-Flick-${{ needs.version.outputs.app_version }}-ios
-          path: ios/build/CA-Flick-${{ needs.version.outputs.app_version }}.ipa
-          if-no-files-found: error
-
   release:
     name: GitHub Release
-    needs: [version, android, ios]
+    needs: [version, android]
     if: needs.version.outputs.create_release == 'true'
     runs-on: ubuntu-latest
     steps:
@@ -249,7 +178,6 @@ jobs:
           ls -la dist
           gh release create "v${VERSION}" \
             dist/CA-Flick-"${VERSION}".apk \
-            dist/CA-Flick-"${VERSION}".ipa \
             --title "CA-Flick ${VERSION}" \
             --generate-notes \
             --target "${{ github.sha }}"
