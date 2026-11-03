@@ -4,7 +4,7 @@
 # Optional:
 #   EXPO_PUBLIC_WATCH_PARTY_URL
 #
-# Merging a PR to main bumps the patch version, builds APK + IPA, and
+# Pushing to v2.x.x bumps the patch version, builds APK + IPA, and
 # publishes a GitHub Release. Manual runs (workflow_dispatch) only upload
 # artifacts unless you enable create_release.
 
@@ -32,7 +32,7 @@ on:
 
 concurrency:
   group: build-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/v2.x.x' }}
 
 permissions:
   contents: write
@@ -94,7 +94,7 @@ jobs:
           fi
 
           CREATE_RELEASE=false
-          if [ "${{ github.event_name }}" = "push" ] && [ "${{ github.ref }}" = "refs/heads/main" ]; then
+          if [ "${{ github.event_name }}" = "push" ] && [ "${{ github.ref }}" = "refs/heads/v2.x.x" ]; then
             CREATE_RELEASE=true
           elif [ "${{ github.event.inputs.create_release || 'false' }}" = "true" ]; then
             CREATE_RELEASE=true
@@ -103,7 +103,7 @@ jobs:
           echo "app_version=${VERSION}" >> "$GITHUB_OUTPUT"
           echo "android_version_code=${CODE}" >> "$GITHUB_OUTPUT"
           echo "create_release=${CREATE_RELEASE}" >> "$GITHUB_OUTPUT"
-          echo "Building Flick ${VERSION} (${CODE}), release=${CREATE_RELEASE}, previous_tag=${LATEST_TAG:-none}"
+          echo "Building CA-Flick ${VERSION} (${CODE}), release=${CREATE_RELEASE}, previous_tag=${LATEST_TAG:-none}"
 
   android:
     name: Android APK
@@ -113,7 +113,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Flick
+      - name: Setup CA-Flick
         uses: ./.github/actions/setup-flick
         with:
           app_version: ${{ needs.version.outputs.app_version }}
@@ -142,13 +142,13 @@ jobs:
       - name: Rename APK
         run: |
           cp android/app/build/outputs/apk/release/app-release.apk \
-            "Flick-${{ needs.version.outputs.app_version }}.apk"
+            "CA-Flick-${{ needs.version.outputs.app_version }}.apk"
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: Flick-${{ needs.version.outputs.app_version }}-android
-          path: Flick-${{ needs.version.outputs.app_version }}.apk
+          name: CA-Flick-${{ needs.version.outputs.app_version }}-android
+          path: CA-Flick-${{ needs.version.outputs.app_version }}.apk
           if-no-files-found: error
 
   ios:
@@ -164,7 +164,7 @@ jobs:
         with:
           xcode-version: latest-stable
 
-      - name: Setup Flick
+      - name: Setup CA-Flick
         uses: ./.github/actions/setup-flick
         with:
           app_version: ${{ needs.version.outputs.app_version }}
@@ -213,13 +213,13 @@ jobs:
           test -d "$APP"
           mkdir -p ios/build/Payload
           cp -R "$APP" ios/build/Payload/
-          (cd ios/build && zip -qry "Flick-${APP_VERSION}.ipa" Payload)
+          (cd ios/build && zip -qry "CA-Flick-${APP_VERSION}.ipa" Payload)
 
       - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:
-          name: Flick-${{ needs.version.outputs.app_version }}-ios
-          path: ios/build/Flick-${{ needs.version.outputs.app_version }}.ipa
+          name: CA-Flick-${{ needs.version.outputs.app_version }}-ios
+          path: ios/build/CA-Flick-${{ needs.version.outputs.app_version }}.ipa
           if-no-files-found: error
 
   release:
@@ -235,7 +235,7 @@ jobs:
       - name: Download build artifacts
         uses: actions/download-artifact@v4
         with:
-          pattern: Flick-${{ needs.version.outputs.app_version }}-*
+          pattern: CA-Flick-${{ needs.version.outputs.app_version }}-*
           path: dist
           merge-multiple: true
 
@@ -247,8 +247,8 @@ jobs:
           set -euo pipefail
           ls -la dist
           gh release create "v${VERSION}" \
-            dist/Flick-"${VERSION}".apk \
-            dist/Flick-"${VERSION}".ipa \
-            --title "Flick ${VERSION}" \
+            dist/CA-Flick-"${VERSION}".apk \
+            dist/CA-Flick-"${VERSION}".ipa \
+            --title "CA-Flick ${VERSION}" \
             --generate-notes \
             --target "${{ github.sha }}"
