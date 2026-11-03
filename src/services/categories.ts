@@ -1,4 +1,5 @@
 import { TMDBService } from '@/src/services/TMDBService';
+import { CinemetaService } from '@/src/services/CinemetaService';
 import type { MediaItem, Movie, TVShow } from '@/src/types';
 
 /**
@@ -45,6 +46,8 @@ export const fetchCategoryPage = async (
   query: CategoryQuery,
   page: number,
 ): Promise<MediaItem[]> => {
+  if (query.kind === 'popularMovies' || query.kind === 'trendingMovies') return (await CinemetaService.catalog('movie', page)).results;
+  if (query.kind === 'popularTv' || query.kind === 'trendingTv') return (await CinemetaService.catalog('series', page)).results;
   switch (query.kind) {
     case 'trendingMovies': {
       const res = await TMDBService.getTrendingMovies(page);

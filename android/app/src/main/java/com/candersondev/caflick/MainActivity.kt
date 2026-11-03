@@ -1,4 +1,4 @@
-package com.flickv4
+package com.candersondev.caflick
 
 import android.os.Build
 import android.os.Bundle

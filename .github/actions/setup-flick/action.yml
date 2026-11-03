@@ -1,4 +1,4 @@
-name: Setup Flick
+name: Setup CA-Flick
 description: Install Node, dependencies, and write the build-time .env
 inputs:
   app_version:

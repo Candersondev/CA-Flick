@@ -28,7 +28,7 @@ export const buildHomeFeed = (
 ): HomeRowSpec[] => [
   {
     id: 'top-10-movies-regional',
-    title: `Top 10 Movies in ${regionName}`,
+    title: 'Popular Movies',
     variant: 'topTen',
     query: { kind: 'popularMovies', region },
     wave: 1,
@@ -46,7 +46,7 @@ export const buildHomeFeed = (
   },
   {
     id: 'top-10-movies-worldwide',
-    title: 'Top 10 Movies Worldwide',
+    title: 'Discover Movies',
     variant: 'topTen',
     query: { kind: 'trendingMovies' },
     wave: 2,
@@ -60,7 +60,7 @@ export const buildHomeFeed = (
   },
   {
     id: 'top-10-tv-regional',
-    title: `Top 10 TV in ${regionName}`,
+    title: 'Popular TV Shows',
     variant: 'topTen',
     query: { kind: 'popularTv', region },
     wave: 1,
@@ -78,7 +78,7 @@ export const buildHomeFeed = (
   },
   {
     id: 'top-10-tv-worldwide',
-    title: 'Top 10 TV Worldwide',
+    title: 'Discover TV Shows',
     variant: 'topTen',
     query: { kind: 'trendingTv' },
     wave: 2,
@@ -172,7 +172,7 @@ export const buildHomeFeed = (
     query: { kind: 'genreMovie', genreId: GENRE_IDS.thriller, region },
     wave: 2,
   },
-];
+].filter(spec => ['top-10-movies-regional','top-10-tv-regional','top-10-movies-worldwide','top-10-tv-worldwide'].includes(spec.id));
 
 export const buildBrowseChips = (
   region: string,

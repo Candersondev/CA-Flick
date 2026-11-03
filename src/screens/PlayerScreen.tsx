@@ -25,6 +25,7 @@ import { useServers } from '@/src/hooks/useServers';
 import { useDownloads } from '@/src/hooks/useDownloads';
 import { usePlayerDebugSettings } from '@/src/hooks/usePlayerDebugSettings';
 import { TMDBService } from '@/src/services/TMDBService';
+import { CinemetaService } from '@/src/services/CinemetaService';
 import { forceLandscape, restoreOrientation } from '@/src/utils/orientation';
 import { buildEmbedUrl } from '@/src/utils/streamUrl';
 import { playbackHeadersFor } from '@/src/services/playbackHeaders';
@@ -154,6 +155,8 @@ export const PlayerScreen = ({
   useEffect(() => {
     let cancelled = false;
     setImdbId(null);
+    const known = CinemetaService.imdbId(type === 'tv' ? 'series' : 'movie', item.id);
+    if (known) { setImdbId(known); return; }
     const request =
       type === 'tv'
         ? TMDBService.getTVExternalIds(item.id)

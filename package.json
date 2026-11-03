@@ -1,5 +1,5 @@
 {
-  "name": "flick",
+  "name": "ca-flick",
   "version": "2.1.5",
   "main": "index.ts",
   "dependencies": {

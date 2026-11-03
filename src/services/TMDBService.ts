@@ -39,6 +39,9 @@ class TMDBServiceImpl {
   private readonly apiKey = TMDB_CONFIG.API_KEY;
 
   private async request<T>(path: string, params: QueryParams = {}): Promise<T> {
+    if (!this.apiKey || this.apiKey === 'your_tmdb_api_key') {
+      throw new TMDBError('TMDB API key is not configured', 401);
+    }
     const url = new URL(`${this.baseUrl}${path}`);
     url.searchParams.set('api_key', this.apiKey);
     for (const [key, value] of Object.entries(params)) {
@@ -79,6 +82,7 @@ class TMDBServiceImpl {
     size: 'w185' | 'w200' | 'w300' | 'w500' | 'w780' | 'original' = 'w500',
   ): string {
     if (!path) return '';
+    if (/^https?:\/\//i.test(path)) return path;
     return `https://image.tmdb.org/t/p/${size}${path}`;
   }
 

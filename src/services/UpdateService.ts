@@ -119,7 +119,7 @@ const findApkAsset = (assets: ReleaseAsset[]): ReleaseAsset | null => {
 
 // Fixed filename in the cache directory so a stale copy from a previous
 // attempt/check can be found and cleared before starting a new download.
-const APK_FILENAME = 'flick-update.apk';
+const APK_FILENAME = 'ca-flick-update.apk';
 
 // `Intent.FLAG_GRANT_READ_URI_PERMISSION` — required so the Package
 // Installer (a different app/process) can read our content:// URI.
@@ -147,7 +147,7 @@ class UpdateService {
       const res = await fetch(url, {
         headers: {
           Accept: 'application/vnd.github.v3+json',
-          'User-Agent': 'Flick-App',
+          'User-Agent': 'CA-Flick',
         },
       });
       if (!res.ok) {

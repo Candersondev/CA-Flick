@@ -51,11 +51,11 @@ const TMDB_TIMEOUT_MS = 15000;
 const GITHUB_OWNER =
   process.env.GITHUB_REPO_OWNER ||
   process.env.EXPO_PUBLIC_UPDATE_REPO_OWNER ||
-  'sheeshcake';
+  'Candersondev';
 const GITHUB_REPO =
   process.env.GITHUB_REPO_NAME ||
   process.env.EXPO_PUBLIC_UPDATE_REPO_NAME ||
-  'Flickv4';
+  'CA-Flick';
 const APP_RELEASE_CACHE_MS = 10 * 60 * 1000;
 const CODE_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 const CODE_LENGTH = 5;
@@ -1767,7 +1767,7 @@ const findIpaAsset = (assets) => {
     (a) =>
       typeof a?.name === 'string' &&
       a.name.endsWith('.ipa') &&
-      (a.name.startsWith('Flick-') || a.name.startsWith('Flickv4-')),
+      (a.name.startsWith('CA-Flick-') || a.name.startsWith('Flick-') || a.name.startsWith('Flickv4-')),
   );
   return preferred ?? list.find((a) => typeof a?.name === 'string' && a.name.endsWith('.ipa')) ?? null;
 };
@@ -1780,7 +1780,7 @@ const findDmgAsset = (assets) => {
   const preferred = dmg.find(
     (a) =>
       a.name.startsWith('Flick-') ||
-      a.name.startsWith('Flickv4-') ||
+      a.name.startsWith('CA-Flick-') || a.name.startsWith('Flickv4-') ||
       /macos|mac|catalyst/i.test(a.name),
   );
   return preferred ?? dmg[0] ?? null;

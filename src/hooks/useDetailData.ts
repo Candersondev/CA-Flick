@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { pickTrailerKey, TMDBService } from '@/src/services/TMDBService';
+import { CinemetaService } from '@/src/services/CinemetaService';
 import {
   isMovie,
   type CastMember,
@@ -46,6 +47,14 @@ export const useDetailData = (item: MediaItem) => {
     let cancelled = false;
     const run = async () => {
       try {
+        const cm = await CinemetaService.meta(movie ? 'movie' : 'series', item.id);
+        if (cm) {
+          const shared = { ...item, overview: cm.description ?? item.overview, poster_path: cm.poster ?? item.poster_path, backdrop_path: cm.background ?? item.backdrop_path };
+          const seasonNums = [...new Set((cm.videos ?? []).map(v => v.season).filter((n): n is number => typeof n === 'number' && n > 0))].sort((a,b) => a-b);
+          const seasons = seasonNums.map(n => ({ id:n, season_number:n, name:'Season '+n, episode_count:(cm.videos ?? []).filter(v=>v.season===n).length, poster_path:cm.poster ?? null }));
+          if (!cancelled) setState({loading:false,error:null,details:movie ? shared as MovieDetails : {...shared, seasons, number_of_seasons:seasons.length} as TVShowDetails,trailerKey:null,videos:[],similar:[],seasons:movie ? [] : seasons,cast:[],crew:[],certification:null,logoPath:null});
+          return;
+        }
         if (movie) {
           const [details, videos, similar, credits, certification, images] =
             await Promise.all([
@@ -128,8 +137,13 @@ export const useSeasonEpisodes = (tvId: number, seasonNumber: number | null) => 
     if (seasonNumber == null) return;
     setLoading(true);
     try {
-      const data = await TMDBService.getSeasonDetails(tvId, seasonNumber);
-      setEpisodes(data.episodes ?? []);
+      const cm = await CinemetaService.meta('series', tvId);
+      if (cm) {
+        setEpisodes((cm.videos ?? []).filter(v=>v.season===seasonNumber).map(v=>({id:Number(v.episode)||0,episode_number:Number(v.episode)||0,season_number:seasonNumber,name:v.title ?? 'Episode '+v.episode,overview:'',still_path:null,air_date:v.released?.slice(0,10)})));
+      } else {
+        const data = await TMDBService.getSeasonDetails(tvId, seasonNumber);
+        setEpisodes(data.episodes ?? []);
+      }
     } catch {
       setEpisodes([]);
     } finally {
