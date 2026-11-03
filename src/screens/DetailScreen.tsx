@@ -78,6 +78,7 @@ import { useDetailData, useSeasonEpisodes } from '@/src/hooks/useDetailData';
 import { useMyList } from '@/src/hooks/useMyList';
 import { useDeviceKind } from '@/src/hooks/useDeviceKind';
 import { TMDBService } from '@/src/services/TMDBService';
+import { CinemetaService } from '@/src/services/CinemetaService';
 import { TV_FOCUS_BORDER_CLASSNAME } from '@/src/utils/tv';
 import { DetailScreenTV } from '@/src/components/tv/DetailScreenTV';
 import {
@@ -182,6 +183,8 @@ export const DetailScreen = ({
 
   useEffect(() => {
     let cancelled = false;
+    const known = CinemetaService.imdbId(movie ? 'movie' : 'series', item.id);
+    if (known) { setImdbId(known); return; }
     const request = movie
       ? TMDBService.getMovieExternalIds(item.id)
       : TMDBService.getTVExternalIds(item.id);
