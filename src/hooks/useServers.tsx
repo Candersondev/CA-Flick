@@ -172,6 +172,17 @@ export const STREAMFLIX_SERVER: PlaybackServer = {
   resolver: 'streamflix',
 };
 
+/** Optional Movy-linked Vidy embed server. Existing playback providers are unchanged. */
+export const MOVY_VIDY_SERVER: PlaybackServer = {
+  id: 'movy-vidy',
+  name: 'Movy (Vidy)',
+  url: 'https://vidy.st',
+  builtIn: true,
+  resolver: 'webview',
+  movieUrlPattern: '{url}/movie/{tmdbId}',
+  tvUrlPattern: '{url}/tv/{tmdbId}/{season}/{episode}',
+};
+
 const isLegacyMoviebox = (server: { id?: string; resolver?: string }) =>
   server.id === 'moviebox' || server.resolver === 'moviebox';
 
@@ -182,19 +193,21 @@ const withLocalResolvers = (
   const webview = list.filter(
     (s) =>
       s.id !== STREAMFLIX_SERVER.id &&
+      s.id !== MOVY_VIDY_SERVER.id &&
       !isLegacyMoviebox(s) &&
       s.resolver !== 'streamflix' &&
       !isFlixQuestServer(s),
   );
   const takenNames = new Set([
     STREAMFLIX_SERVER.name,
+    MOVY_VIDY_SERVER.name,
     ...webview.map((s) => s.name),
   ]);
   const namedFq = flixQuestServers.map((s) => ({
     ...s,
     name: takenNames.has(s.name) ? `${s.name} API` : s.name,
   }));
-  return [STREAMFLIX_SERVER, ...namedFq, ...webview];
+  return [STREAMFLIX_SERVER, ...namedFq, MOVY_VIDY_SERVER, ...webview];
 };
 
 /**
